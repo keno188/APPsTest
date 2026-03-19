@@ -13,18 +13,13 @@
     --fern: #6aab7a;
     --mint: #a8d5b0;
     --cream: #f5f0e8;
-    --bark: #7a5c3a;
-    --sand: #e8dcc8;
     --alive: #3d9e5f;
     --dead: #c0392b;
     --good: #2980b9;
     --dehy: #e67e22;
     --white: #ffffff;
-    --shadow: rgba(26,58,42,0.15);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--forest);
@@ -32,8 +27,6 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
-
-  /* BG texture */
   body::before {
     content: '';
     position: fixed;
@@ -44,7 +37,6 @@
     pointer-events: none;
     z-index: 0;
   }
-
   .app {
     position: relative;
     z-index: 1;
@@ -55,7 +47,31 @@
     flex-direction: column;
   }
 
-  /* ── HEADER ── */
+  /* LOADER */
+  .loader-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(10,30,18,0.7);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    backdrop-filter: blur(4px);
+  }
+  .loader-overlay.show { display: flex; }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid rgba(168,213,176,0.2);
+    border-top-color: var(--mint);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loader-text { font-size: 13px; color: var(--mint); }
+
+  /* HEADER */
   header {
     padding: 20px 20px 16px;
     background: linear-gradient(180deg, rgba(26,58,42,0.95) 0%, transparent 100%);
@@ -64,67 +80,20 @@
     z-index: 100;
     backdrop-filter: blur(8px);
   }
-
-  .header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 4px;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: var(--sage);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-  }
-
-  .app-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 18px;
-    color: var(--mint);
-    line-height: 1;
-  }
-
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon { width: 36px; height: 36px; background: var(--sage); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .app-title { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--mint); line-height: 1; }
   .app-subtitle { font-size: 11px; color: var(--fern); opacity: 0.8; }
+  .stats-pill { background: rgba(106,171,122,0.2); border: 1px solid rgba(106,171,122,0.3); border-radius: 20px; padding: 4px 12px; font-size: 12px; color: var(--mint); }
 
-  .stats-pill {
-    background: rgba(106,171,122,0.2);
-    border: 1px solid rgba(106,171,122,0.3);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 12px;
-    color: var(--mint);
-  }
-
-  /* ── SCREENS ── */
+  /* SCREENS */
   .screen { display: none; flex-direction: column; flex: 1; padding: 16px 20px 80px; }
   .screen.active { display: flex; }
 
-  /* ── PARCELA LIST ── */
-  .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--fern);
-    margin-bottom: 12px;
-  }
-
-  .parcela-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
+  /* PARCELA LIST */
+  .section-label { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--fern); margin-bottom: 12px; }
+  .parcela-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
   .parcela-card {
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(106,171,122,0.2);
@@ -135,65 +104,16 @@
     position: relative;
     overflow: hidden;
   }
-
-  .parcela-card:hover, .parcela-card:active {
-    background: rgba(106,171,122,0.15);
-    border-color: var(--fern);
-    transform: scale(0.98);
-  }
-
-  .parcela-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--sage);
-  }
-
+  .parcela-card:hover, .parcela-card:active { background: rgba(106,171,122,0.15); border-color: var(--fern); transform: scale(0.98); }
+  .parcela-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--sage); }
   .parcela-card.complete::before { background: var(--alive); }
   .parcela-card.partial::before { background: var(--dehy); }
-
-  .parcela-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 22px;
-    color: var(--mint);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .parcela-name {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--cream);
-    margin-bottom: 8px;
-  }
-
-  .parcela-meta {
-    font-size: 11px;
-    color: var(--fern);
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .progress-bar {
-    height: 4px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 2px;
-    margin-top: 8px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: var(--fern);
-    border-radius: 2px;
-    transition: width 0.4s;
-  }
-
+  .parcela-num { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--mint); line-height: 1; margin-bottom: 4px; }
+  .parcela-name { font-size: 12px; font-weight: 500; color: var(--cream); margin-bottom: 8px; }
+  .parcela-meta { font-size: 11px; color: var(--fern); display: flex; flex-direction: column; gap: 2px; }
+  .progress-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--fern); border-radius: 2px; transition: width 0.4s; }
   .progress-fill.done { background: var(--alive); }
-
-  /* Add parcela btn */
   .btn-add-parcela {
     background: rgba(106,171,122,0.1);
     border: 2px dashed rgba(106,171,122,0.4);
@@ -210,511 +130,106 @@
     justify-content: center;
     gap: 8px;
   }
-
   .btn-add-parcela:hover { background: rgba(106,171,122,0.2); border-color: var(--fern); }
 
-  /* ── MUESTREO SCREEN ── */
-  .back-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: var(--fern);
-    cursor: pointer;
-    margin-bottom: 16px;
-    width: fit-content;
-  }
-
-  .parcela-header-card {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(106,171,122,0.25);
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .parcela-icon-big {
-    width: 48px; height: 48px;
-    background: var(--moss);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px;
-    flex-shrink: 0;
-  }
-
-  .parcela-info h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 20px;
-    color: var(--mint);
-  }
-
+  /* MUESTREO */
+  .back-btn { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--fern); cursor: pointer; margin-bottom: 16px; width: fit-content; }
+  .parcela-header-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(106,171,122,0.25); border-radius: 16px; padding: 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
+  .parcela-icon-big { width: 48px; height: 48px; background: var(--moss); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+  .parcela-info h2 { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--mint); }
   .parcela-info p { font-size: 12px; color: var(--fern); margin-top: 2px; }
-
-  .counter-badge {
-    margin-left: auto;
-    background: rgba(106,171,122,0.2);
-    border: 1px solid rgba(106,171,122,0.4);
-    border-radius: 10px;
-    padding: 6px 10px;
-    text-align: center;
-    flex-shrink: 0;
-  }
-
+  .counter-badge { margin-left: auto; background: rgba(106,171,122,0.2); border: 1px solid rgba(106,171,122,0.4); border-radius: 10px; padding: 6px 10px; text-align: center; flex-shrink: 0; }
   .counter-badge .count { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--mint); }
   .counter-badge .label { font-size: 10px; color: var(--fern); }
-
-  /* Samples list */
   .samples-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .sample-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px;
-    padding: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-  }
-
+  .sample-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px; cursor: pointer; transition: all 0.2s; position: relative; }
   .sample-card:hover { background: rgba(255,255,255,0.09); }
-
   .sample-card.recorded { border-color: rgba(106,171,122,0.4); }
-
-  .sample-top {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 0;
-  }
-
-  .sample-num {
-    width: 28px; height: 28px;
-    background: var(--moss);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--mint);
-    flex-shrink: 0;
-  }
-
+  .sample-top { display: flex; align-items: center; gap: 10px; }
+  .sample-num { width: 28px; height: 28px; background: var(--moss); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--mint); flex-shrink: 0; }
   .sample-num.recorded { background: rgba(61,158,95,0.3); color: var(--alive); }
-
-  .sample-species {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--cream);
-    flex: 1;
-  }
-
-  .sample-species.pending { color: rgba(245,240,232,0.4); font-style: italic; }
-
-  .sample-tags {
-    display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .tag {
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 6px;
-    letter-spacing: 0.3px;
-  }
-
+  .sample-species { font-size: 13px; font-weight: 500; color: var(--cream); flex: 1; }
+  .sample-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); }
+  .tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.3px; }
   .tag.alive { background: rgba(61,158,95,0.2); color: #6dcf8e; border: 1px solid rgba(61,158,95,0.3); }
   .tag.dead { background: rgba(192,57,43,0.2); color: #e87060; border: 1px solid rgba(192,57,43,0.3); }
   .tag.good { background: rgba(41,128,185,0.2); color: #64b4e0; border: 1px solid rgba(41,128,185,0.3); }
   .tag.dehy { background: rgba(230,126,34,0.2); color: #f0a060; border: 1px solid rgba(230,126,34,0.3); }
-
   .sample-chevron { color: var(--fern); font-size: 16px; }
-
-  /* ── ADD SAMPLE BTN ── */
-  .btn-add-sample {
-    background: var(--sage);
-    border: none;
-    border-radius: 14px;
-    padding: 14px;
-    color: var(--white);
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.2s;
-    width: 100%;
-    margin-top: 12px;
-  }
-
+  .btn-add-sample { background: var(--sage); border: none; border-radius: 14px; padding: 14px; color: var(--white); font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; width: 100%; margin-top: 12px; }
   .btn-add-sample:hover { background: var(--fern); }
+  .delete-btn { position: absolute; top: 10px; right: 10px; background: rgba(192,57,43,0.2); border: 1px solid rgba(192,57,43,0.3); border-radius: 6px; color: #e87060; font-size: 12px; padding: 3px 7px; cursor: pointer; display: none; }
+  .sample-card:hover .delete-btn { display: block; }
 
-  /* ── MODAL ── */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(10,30,18,0.85);
-    z-index: 200;
-    backdrop-filter: blur(4px);
-    align-items: flex-end;
-    justify-content: center;
-  }
-
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,30,18,0.85); z-index: 200; backdrop-filter: blur(4px); align-items: flex-end; justify-content: center; }
   .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: #1e4030;
-    border-radius: 24px 24px 0 0;
-    padding: 24px 20px 40px;
-    width: 100%;
-    max-width: 480px;
-    animation: slideUp 0.25s ease;
-    border: 1px solid rgba(106,171,122,0.25);
-    border-bottom: none;
-    max-height: 92vh;
-    overflow-y: auto;
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(100%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  .modal-handle {
-    width: 40px; height: 4px;
-    background: rgba(106,171,122,0.4);
-    border-radius: 2px;
-    margin: 0 auto 20px;
-  }
-
-  .modal-title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 20px;
-    color: var(--mint);
-    margin-bottom: 20px;
-  }
-
+  .modal { background: #1e4030; border-radius: 24px 24px 0 0; padding: 24px 20px 40px; width: 100%; max-width: 480px; animation: slideUp 0.25s ease; border: 1px solid rgba(106,171,122,0.25); border-bottom: none; max-height: 92vh; overflow-y: auto; }
+  @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-handle { width: 40px; height: 4px; background: rgba(106,171,122,0.4); border-radius: 2px; margin: 0 auto 20px; }
+  .modal-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--mint); margin-bottom: 20px; }
   .form-group { margin-bottom: 16px; }
-
-  .form-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--fern);
-    margin-bottom: 8px;
-    display: block;
-  }
-
-  /* Species selector */
-  .species-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 8px;
-  }
-
-  .species-btn {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
-    padding: 10px 12px;
-    color: var(--cream);
-    font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    text-align: left;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
+  .form-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--fern); margin-bottom: 8px; display: block; }
+  .species-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+  .species-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 12px; color: var(--cream); font-size: 12px; font-family: 'DM Sans', sans-serif; cursor: pointer; text-align: left; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
   .species-btn:hover { background: rgba(106,171,122,0.15); }
-  .species-btn.selected {
-    background: rgba(106,171,122,0.25);
-    border-color: var(--fern);
-    color: var(--mint);
-    font-weight: 600;
-  }
-
-  /* Toggle buttons */
-  .toggle-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .toggle-btn {
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.05);
-    color: var(--cream);
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-
+  .species-btn.selected { background: rgba(106,171,122,0.25); border-color: var(--fern); color: var(--mint); font-weight: 600; }
+  .toggle-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .toggle-btn { padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: var(--cream); font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .toggle-btn.alive.selected { background: rgba(61,158,95,0.25); border-color: var(--alive); color: #6dcf8e; }
   .toggle-btn.dead.selected { background: rgba(192,57,43,0.25); border-color: var(--dead); color: #e87060; }
   .toggle-btn.good.selected { background: rgba(41,128,185,0.25); border-color: var(--good); color: #64b4e0; }
   .toggle-btn.dehy.selected { background: rgba(230,126,34,0.25); border-color: var(--dehy); color: #f0a060; }
-
-  .notes-input {
-    width: 100%;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 10px;
-    padding: 10px 12px;
-    color: var(--cream);
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    resize: none;
-    outline: none;
-  }
-
+  .notes-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px; color: var(--cream); font-size: 13px; font-family: 'DM Sans', sans-serif; resize: none; outline: none; }
   .notes-input:focus { border-color: var(--fern); }
   .notes-input::placeholder { color: rgba(245,240,232,0.3); }
-
-  .modal-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  .btn-cancel {
-    padding: 14px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: var(--cream);
-    font-size: 14px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-  }
-
-  .btn-save {
-    padding: 14px;
-    border-radius: 12px;
-    background: var(--sage);
-    border: none;
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
+  .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+  .btn-cancel { padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: var(--cream); font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; }
+  .btn-save { padding: 14px; border-radius: 12px; background: var(--sage); border: none; color: white; font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.2s; }
   .btn-save:hover { background: var(--fern); }
   .btn-save:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  /* ── ADD PARCELA MODAL ── */
-  .text-input {
-    width: 100%;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 10px;
-    padding: 11px 12px;
-    color: var(--cream);
-    font-size: 14px;
-    font-family: 'DM Sans', sans-serif;
-    outline: none;
-  }
-
+  .text-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 11px 12px; color: var(--cream); font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; }
   .text-input:focus { border-color: var(--fern); }
   .text-input::placeholder { color: rgba(245,240,232,0.3); }
+  .chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+  .ejemplar-chip { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: rgba(255,255,255,0.08); color: var(--cream); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+  .ejemplar-chip.selected-chip { background: rgba(106,171,122,0.25); border-color: var(--fern); color: var(--mint); }
 
-  /* ── BOTTOM NAV ── */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 100%; max-width: 480px;
-    background: rgba(26,58,42,0.95);
-    border-top: 1px solid rgba(106,171,122,0.2);
-    display: flex;
-    backdrop-filter: blur(10px);
-    z-index: 100;
-  }
-
-  .nav-btn {
-    flex: 1;
-    padding: 12px 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    color: rgba(168,213,176,0.5);
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.3px;
-    transition: color 0.2s;
-    border: none;
-    background: none;
-    font-family: 'DM Sans', sans-serif;
-  }
-
+  /* BOTTOM NAV */
+  .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: rgba(26,58,42,0.95); border-top: 1px solid rgba(106,171,122,0.2); display: flex; backdrop-filter: blur(10px); z-index: 100; }
+  .nav-btn { flex: 1; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; color: rgba(168,213,176,0.5); font-size: 10px; font-weight: 500; letter-spacing: 0.3px; transition: color 0.2s; border: none; background: none; font-family: 'DM Sans', sans-serif; }
   .nav-btn .icon { font-size: 20px; }
   .nav-btn.active { color: var(--mint); }
 
-  /* ── RESUMEN SCREEN ── */
-  .summary-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(106,171,122,0.2);
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-
-  .summary-card h3 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 16px;
-    color: var(--mint);
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .stat-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 13px;
-  }
-
+  /* RESUMEN */
+  .summary-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(106,171,122,0.2); border-radius: 16px; padding: 16px; margin-bottom: 12px; }
+  .summary-card h3 { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--mint); margin-bottom: 12px; }
+  .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
   .stat-row:last-child { border-bottom: none; }
   .stat-label { color: var(--fern); }
   .stat-value { font-weight: 600; color: var(--cream); }
-
-  .big-stat {
-    text-align: center;
-    padding: 20px;
-  }
-
-  .big-stat .number {
-    font-family: 'DM Serif Display', serif;
-    font-size: 48px;
-    color: var(--mint);
-    line-height: 1;
-  }
-
-  .big-stat .desc { font-size: 12px; color: var(--fern); margin-top: 4px; }
-
-  .overview-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-
-  .overview-item {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(106,171,122,0.15);
-    border-radius: 12px;
-    padding: 14px;
-    text-align: center;
-  }
-
-  .overview-item .ov-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 28px;
-    color: var(--mint);
-    line-height: 1;
-  }
-
+  .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .overview-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(106,171,122,0.15); border-radius: 12px; padding: 14px; text-align: center; }
+  .overview-item .ov-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--mint); line-height: 1; }
   .overview-item .ov-label { font-size: 11px; color: var(--fern); margin-top: 4px; }
-
-  .donut-wrap { display: flex; justify-content: center; margin: 12px 0; }
-
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--fern);
-    opacity: 0.6;
-  }
-
+  .empty-state { text-align: center; padding: 40px 20px; color: var(--fern); opacity: 0.6; }
   .empty-state .empty-icon { font-size: 40px; margin-bottom: 12px; }
   .empty-state p { font-size: 14px; }
 
-  .delete-btn {
-    position: absolute;
-    top: 10px; right: 10px;
-    background: rgba(192,57,43,0.2);
-    border: 1px solid rgba(192,57,43,0.3);
-    border-radius: 6px;
-    color: #e87060;
-    font-size: 12px;
-    padding: 3px 7px;
-    cursor: pointer;
-    display: none;
-  }
-
-  .sample-card:hover .delete-btn { display: block; }
-
-  .chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-
-  .ejemplar-chip {
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.08);
-    color: var(--cream);
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-
-  .ejemplar-chip.selected-chip {
-    background: rgba(106,171,122,0.25);
-    border-color: var(--fern);
-    color: var(--mint);
-  }
-
-  /* Confirmation toast */
-  .toast {
-    position: fixed;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--moss);
-    border: 1px solid var(--fern);
-    border-radius: 12px;
-    padding: 10px 20px;
-    font-size: 13px;
-    color: var(--mint);
-    z-index: 300;
-    opacity: 0;
-    transition: all 0.3s;
-    white-space: nowrap;
-  }
-
+  /* TOAST */
+  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--moss); border: 1px solid var(--fern); border-radius: 12px; padding: 10px 20px; font-size: 13px; color: var(--mint); z-index: 300; opacity: 0; transition: all 0.3s; white-space: nowrap; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* SYNC indicator */
+  .sync-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--fern); display: inline-block; margin-right: 4px; }
+  .sync-dot.syncing { background: var(--dehy); animation: pulse 1s infinite; }
+  .sync-dot.error { background: var(--dead); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- HEADER -->
   <header>
     <div class="header-top">
       <div class="logo">
@@ -724,20 +239,21 @@
           <div class="app-subtitle">Monitoreo de Reforestación</div>
         </div>
       </div>
-      <div class="stats-pill" id="headerStats">0 parcelas</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span class="sync-dot" id="syncDot"></span>
+        <div class="stats-pill" id="headerStats">0 parcelas</div>
+      </div>
     </div>
   </header>
 
-  <!-- ══ SCREEN: PARCELAS ══ -->
+  <!-- SCREEN: PARCELAS -->
   <div class="screen active" id="screen-parcelas">
     <div class="section-label">Mis Parcelas</div>
     <div class="parcela-grid" id="parcelaGrid"></div>
-    <div class="btn-add-parcela" onclick="openAddParcela()">
-      <span>＋</span> Agregar Parcela
-    </div>
+    <div class="btn-add-parcela" onclick="openAddParcela()">＋ Agregar Parcela</div>
   </div>
 
-  <!-- ══ SCREEN: MUESTREO ══ -->
+  <!-- SCREEN: MUESTREO -->
   <div class="screen" id="screen-muestreo">
     <div class="back-btn" onclick="goBack()">← Volver</div>
     <div class="parcela-header-card" id="muestreoHeader"></div>
@@ -746,44 +262,35 @@
     <button class="btn-add-sample" onclick="openAddSample()">＋ Registrar Nueva Muestra</button>
   </div>
 
-  <!-- ══ SCREEN: RESUMEN ══ -->
+  <!-- SCREEN: RESUMEN -->
   <div class="screen" id="screen-resumen">
     <div class="section-label">Resumen General</div>
     <div id="resumenContent"></div>
   </div>
 
-  <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="showScreen('parcelas')" id="nav-parcelas">
-      <span class="icon">🗺️</span>Parcelas
-    </button>
-    <button class="nav-btn" onclick="showScreen('resumen')" id="nav-resumen">
-      <span class="icon">📊</span>Resumen
-    </button>
+    <button class="nav-btn active" onclick="showScreen('parcelas')" id="nav-parcelas"><span class="icon">🗺️</span>Parcelas</button>
+    <button class="nav-btn" onclick="showScreen('resumen')" id="nav-resumen"><span class="icon">📊</span>Resumen</button>
   </nav>
 </div>
 
-<!-- ══ MODAL: AGREGAR PARCELA ══ -->
+<!-- MODAL: AGREGAR PARCELA -->
 <div class="modal-overlay" id="modalParcela">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">Nueva Parcela</div>
-
     <div class="form-group">
       <label class="form-label">Nombre / Código de Parcela</label>
       <input class="text-input" id="parcelaName" placeholder="Ej: Parcela Norte A-1" />
     </div>
-
     <div class="form-group">
       <label class="form-label">Número de Muestras Planificadas</label>
       <input class="text-input" type="number" id="parcelaMuestras" placeholder="Ej: 25" min="1" max="100" />
     </div>
-
     <div class="form-group">
       <label class="form-label">Ejemplares presentes en esta parcela</label>
       <div class="chip-row" id="ejemplarSelector"></div>
     </div>
-
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeParcela()">Cancelar</button>
       <button class="btn-save" onclick="saveParcela()">Crear Parcela</button>
@@ -791,17 +298,15 @@
   </div>
 </div>
 
-<!-- ══ MODAL: REGISTRAR MUESTRA ══ -->
+<!-- MODAL: REGISTRAR MUESTRA -->
 <div class="modal-overlay" id="modalSample">
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title" id="modalSampleTitle">Registrar Muestra</div>
-
     <div class="form-group">
       <label class="form-label">Especie / Ejemplar</label>
       <div class="species-grid" id="speciesGrid"></div>
     </div>
-
     <div class="form-group">
       <label class="form-label">Estado del ejemplar</label>
       <div class="toggle-group">
@@ -809,7 +314,6 @@
         <button class="toggle-btn dead" onclick="selectEstado('muerto')" id="btn-muerto">💀 Muerto</button>
       </div>
     </div>
-
     <div class="form-group">
       <label class="form-label">Condición del ejemplar</label>
       <div class="toggle-group">
@@ -817,12 +321,10 @@
         <button class="toggle-btn dehy" onclick="selectCondicion('deshidratado')" id="btn-deshidratado">🌵 Deshidratado</button>
       </div>
     </div>
-
     <div class="form-group">
       <label class="form-label">Notas adicionales (opcional)</label>
       <textarea class="notes-input" id="sampleNotes" rows="2" placeholder="Observaciones, altura, daños..."></textarea>
     </div>
-
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeSample()">Cancelar</button>
       <button class="btn-save" id="btnSaveSample" onclick="saveSample()">Guardar</button>
@@ -830,33 +332,139 @@
   </div>
 </div>
 
+<!-- LOADER -->
+<div class="loader-overlay" id="loaderOverlay">
+  <div class="spinner"></div>
+  <div class="loader-text" id="loaderText">Cargando...</div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ── DATA ──
+// ── AIRTABLE CONFIG ──
+const AT_TOKEN = 'patuHt2aK29jZIlBt.d7f043623a14532710b399f2b02b76c51737262485f91e932eed0409716a5188';
+const AT_BASE  = 'appXFPgTR3V2EBWYE';
+const AT_URL   = `https://api.airtable.com/v0/${AT_BASE}`;
+const HEADERS  = { 'Authorization': `Bearer ${AT_TOKEN}`, 'Content-Type': 'application/json' };
+
+// ── EJEMPLARES ──
 const EJEMPLARES = [
-  { id: 'e1', name: 'Peumo', icon: '🌳' },
-  { id: 'e2', name: 'Boldo', icon: '🌿' },
-  { id: 'e3', name: 'Quillay', icon: '🍃' },
-  { id: 'e4', name: 'Litre', icon: '🌱' },
+  { id: 'e1', name: 'Peumo',  icon: '🌳' },
+  { id: 'e2', name: 'Boldo',  icon: '🌿' },
+  { id: 'e3', name: 'Quillay',icon: '🍃' },
+  { id: 'e4', name: 'Litre',  icon: '🌱' },
   { id: 'e5', name: 'Maitén', icon: '🌲' },
 ];
 
-let parcelas = JSON.parse(localStorage.getItem('parcelas') || '[]');
+// ── STATE ──
+let parcelas = [];
 let currentParcelaId = null;
 let currentSampleEdit = null;
-let selectedEjemplares = [];
+let currentSampleAirtableId = null;
+let selectedEjemplaresNew = [];
 let formState = { especie: null, estado: null, condicion: null };
 
-// ── UTILS ──
-function save() { localStorage.setItem('parcelas', JSON.stringify(parcelas)); }
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+// ── UI HELPERS ──
+function showLoader(msg = 'Cargando...') {
+  document.getElementById('loaderText').textContent = msg;
+  document.getElementById('loaderOverlay').classList.add('show');
+}
+function hideLoader() { document.getElementById('loaderOverlay').classList.remove('show'); }
+
+function setSyncDot(state) {
+  const d = document.getElementById('syncDot');
+  d.className = 'sync-dot' + (state === 'syncing' ? ' syncing' : state === 'error' ? ' error' : '');
+}
 
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+// ── AIRTABLE API ──
+async function atGet(table, formula = '') {
+  let url = `${AT_URL}/${encodeURIComponent(table)}?pageSize=100`;
+  if (formula) url += `&filterByFormula=${encodeURIComponent(formula)}`;
+  const res = await fetch(url, { headers: HEADERS });
+  if (!res.ok) throw new Error(`Error ${res.status}`);
+  const data = await res.json();
+  return data.records || [];
+}
+
+async function atCreate(table, fields) {
+  const res = await fetch(`${AT_URL}/${encodeURIComponent(table)}`, {
+    method: 'POST',
+    headers: HEADERS,
+    body: JSON.stringify({ fields })
+  });
+  if (!res.ok) throw new Error(`Error ${res.status}`);
+  return await res.json();
+}
+
+async function atUpdate(table, id, fields) {
+  const res = await fetch(`${AT_URL}/${encodeURIComponent(table)}/${id}`, {
+    method: 'PATCH',
+    headers: HEADERS,
+    body: JSON.stringify({ fields })
+  });
+  if (!res.ok) throw new Error(`Error ${res.status}`);
+  return await res.json();
+}
+
+async function atDelete(table, id) {
+  const res = await fetch(`${AT_URL}/${encodeURIComponent(table)}/${id}`, {
+    method: 'DELETE',
+    headers: HEADERS
+  });
+  if (!res.ok) throw new Error(`Error ${res.status}`);
+  return await res.json();
+}
+
+// ── LOAD DATA ──
+async function loadAll() {
+  showLoader('Sincronizando datos...');
+  setSyncDot('syncing');
+  try {
+    const [pRecs, mRecs] = await Promise.all([
+      atGet('Parcelas'),
+      atGet('Muestras')
+    ]);
+
+    parcelas = pRecs.map(r => ({
+      id: r.id,
+      code: r.fields.Codigo || '',
+      name: r.fields.Name || '',
+      totalMuestras: r.fields.TotalMuestras || 0,
+      ejemplares: r.fields.Ejemplares ? r.fields.Ejemplares.split(',') : [],
+      samples: []
+    }));
+
+    mRecs.forEach(r => {
+      const p = parcelas.find(x => x.id === r.fields.ParcelaId);
+      if (p) {
+        p.samples.push({
+          airtableId: r.id,
+          especieId: r.fields.Especie || '',
+          estado: r.fields.Estado || '',
+          condicion: r.fields.Condicion || '',
+          notes: r.fields.Notas || '',
+          ts: r.fields.Fecha || ''
+        });
+      }
+    });
+
+    setSyncDot('ok');
+    renderParcelas();
+  } catch (e) {
+    setSyncDot('error');
+    showToast('⚠️ Error conectando a Airtable');
+    console.error(e);
+  }
+  hideLoader();
 }
 
 // ── SCREENS ──
@@ -874,12 +482,11 @@ function goBack() {
   showScreen('parcelas');
 }
 
-// ── PARCELAS ──
+// ── RENDER PARCELAS ──
 function renderParcelas() {
   const grid = document.getElementById('parcelaGrid');
   grid.innerHTML = '';
-  const stats = document.getElementById('headerStats');
-  stats.textContent = parcelas.length + ' parcela' + (parcelas.length !== 1 ? 's' : '');
+  document.getElementById('headerStats').textContent = parcelas.length + ' parcela' + (parcelas.length !== 1 ? 's' : '');
 
   if (!parcelas.length) {
     grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🌱</div><p>Aún no hay parcelas.<br>Crea la primera.</p></div>';
@@ -891,12 +498,11 @@ function renderParcelas() {
     const total = p.totalMuestras;
     const pct = Math.min(100, Math.round((done / total) * 100));
     const cls = done >= total ? 'complete' : done > 0 ? 'partial' : '';
-    const ejemplaresNames = EJEMPLARES.filter(e => p.ejemplares.includes(e.id)).map(e => e.icon + e.name).join(', ');
 
     const card = document.createElement('div');
     card.className = 'parcela-card ' + cls;
     card.innerHTML = `
-      <div class="parcela-num">#${p.code || p.id.slice(-3).toUpperCase()}</div>
+      <div class="parcela-num">#${p.code || '—'}</div>
       <div class="parcela-name">${p.name}</div>
       <div class="parcela-meta">
         <span>${done}/${total} muestras</span>
@@ -909,9 +515,7 @@ function renderParcelas() {
   });
 }
 
-// Add parcela modal
-let selectedEjemplaresNew = [];
-
+// ── ADD PARCELA ──
 function openAddParcela() {
   selectedEjemplaresNew = [];
   document.getElementById('parcelaName').value = '';
@@ -940,17 +544,40 @@ function openAddParcela() {
 
 function closeParcela() { document.getElementById('modalParcela').classList.remove('open'); }
 
-function saveParcela() {
+async function saveParcela() {
   const name = document.getElementById('parcelaName').value.trim();
   const total = parseInt(document.getElementById('parcelaMuestras').value);
-  if (!name || !total || total < 1) { alert('Ingresa nombre y número de muestras.'); return; }
-  if (!selectedEjemplaresNew.length) { alert('Selecciona al menos un ejemplar.'); return; }
+  if (!name || !total || total < 1) { showToast('⚠️ Ingresa nombre y número de muestras'); return; }
+  if (!selectedEjemplaresNew.length) { showToast('⚠️ Selecciona al menos un ejemplar'); return; }
 
-  parcelas.push({ id: uid(), code: (parcelas.length + 1), name, totalMuestras: total, ejemplares: [...selectedEjemplaresNew], samples: [] });
-  save();
   closeParcela();
-  renderParcelas();
-  showToast('✅ Parcela creada');
+  showLoader('Guardando parcela...');
+  setSyncDot('syncing');
+  try {
+    const codigo = String(parcelas.length + 1).padStart(3, '0');
+    const rec = await atCreate('Parcelas', {
+      Name: name,
+      Codigo: codigo,
+      TotalMuestras: total,
+      Ejemplares: selectedEjemplaresNew.join(',')
+    });
+    parcelas.push({
+      id: rec.id,
+      code: codigo,
+      name,
+      totalMuestras: total,
+      ejemplares: [...selectedEjemplaresNew],
+      samples: []
+    });
+    setSyncDot('ok');
+    showToast('✅ Parcela guardada en Airtable');
+    renderParcelas();
+  } catch (e) {
+    setSyncDot('error');
+    showToast('❌ Error al guardar parcela');
+    console.error(e);
+  }
+  hideLoader();
 }
 
 // ── MUESTREO ──
@@ -961,7 +588,6 @@ function openMuestreo(id) {
   document.getElementById('screen-muestreo').classList.add('active');
 
   const ejemplaresNombres = EJEMPLARES.filter(e => p.ejemplares.includes(e.id)).map(e => e.icon + ' ' + e.name).join(' · ');
-
   document.getElementById('muestreoHeader').innerHTML = `
     <div class="parcela-icon-big">🗺️</div>
     <div class="parcela-info">
@@ -973,7 +599,6 @@ function openMuestreo(id) {
       <div class="label">muestras</div>
     </div>
   `;
-
   renderSamples(p);
 }
 
@@ -999,29 +624,38 @@ function renderSamples(p) {
       <div class="sample-tags">
         <span class="tag ${s.estado === 'vivo' ? 'alive' : 'dead'}">${s.estado === 'vivo' ? '✅ Vivo' : '💀 Muerto'}</span>
         <span class="tag ${s.condicion === 'buenas_condiciones' ? 'good' : 'dehy'}">${s.condicion === 'buenas_condiciones' ? '💧 Buenas condiciones' : '🌵 Deshidratado'}</span>
-        ${s.notes ? `<span class="tag" style="background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.1);color:rgba(245,240,232,0.6)">📝 ${s.notes.slice(0,20)}${s.notes.length > 20 ? '…' : ''}</span>` : ''}
+        ${s.notes ? `<span class="tag" style="background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.1);color:rgba(245,240,232,0.6)">📝 ${s.notes.slice(0,25)}${s.notes.length > 25 ? '…' : ''}</span>` : ''}
       </div>
-      <button class="delete-btn" onclick="deleteSample(event,${i})">✕ Eliminar</button>
+      <button class="delete-btn" onclick="deleteSample(event,'${s.airtableId}',${i})">✕ Eliminar</button>
     `;
     list.appendChild(card);
   });
 }
 
-function deleteSample(e, idx) {
+async function deleteSample(e, airtableId, idx) {
   e.stopPropagation();
   if (!confirm('¿Eliminar esta muestra?')) return;
-  const p = parcelas.find(x => x.id === currentParcelaId);
-  p.samples.splice(idx, 1);
-  save();
-  renderSamples(p);
-  openMuestreo(currentParcelaId);
-  showToast('Muestra eliminada');
+  showLoader('Eliminando muestra...');
+  setSyncDot('syncing');
+  try {
+    await atDelete('Muestras', airtableId);
+    const p = parcelas.find(x => x.id === currentParcelaId);
+    p.samples.splice(idx, 1);
+    setSyncDot('ok');
+    showToast('Muestra eliminada');
+    openMuestreo(currentParcelaId);
+  } catch (err) {
+    setSyncDot('error');
+    showToast('❌ Error al eliminar');
+  }
+  hideLoader();
 }
 
 function editSample(idx) {
   currentSampleEdit = idx;
   const p = parcelas.find(x => x.id === currentParcelaId);
   const s = p.samples[idx];
+  currentSampleAirtableId = s.airtableId;
   formState = { especie: s.especieId, estado: s.estado, condicion: s.condicion };
   document.getElementById('sampleNotes').value = s.notes || '';
   document.getElementById('modalSampleTitle').textContent = 'Editar Muestra #' + (idx + 1);
@@ -1033,6 +667,7 @@ function editSample(idx) {
 // ── ADD SAMPLE ──
 function openAddSample() {
   currentSampleEdit = null;
+  currentSampleAirtableId = null;
   formState = { especie: null, estado: null, condicion: null };
   document.getElementById('sampleNotes').value = '';
   document.getElementById('modalSampleTitle').textContent = 'Registrar Muestra';
@@ -1058,47 +693,59 @@ function buildSpeciesGrid(p) {
   });
 }
 
-function selectEstado(val) {
-  formState.estado = val;
-  updateToggles();
-}
-
-function selectCondicion(val) {
-  formState.condicion = val;
-  updateToggles();
-}
+function selectEstado(val) { formState.estado = val; updateToggles(); }
+function selectCondicion(val) { formState.condicion = val; updateToggles(); }
 
 function updateToggles() {
-  ['vivo', 'muerto'].forEach(v => {
-    document.getElementById('btn-' + v)?.classList.toggle('selected', formState.estado === v);
-  });
+  ['vivo', 'muerto'].forEach(v => document.getElementById('btn-' + v)?.classList.toggle('selected', formState.estado === v));
   ['buenas', 'deshidratado'].forEach(v => {
     const key = v === 'buenas' ? 'buenas_condiciones' : 'deshidratado';
     document.getElementById('btn-' + v)?.classList.toggle('selected', formState.condicion === key);
   });
 }
 
-function closeSample() { document.getElementById('modalSample').classList.remove('open'); currentSampleEdit = null; }
+function closeSample() { document.getElementById('modalSample').classList.remove('open'); currentSampleEdit = null; currentSampleAirtableId = null; }
 
-function saveSample() {
+async function saveSample() {
   if (!formState.especie || !formState.estado || !formState.condicion) {
     showToast('⚠️ Completa todos los campos');
     return;
   }
+
   const p = parcelas.find(x => x.id === currentParcelaId);
-  const sample = { especieId: formState.especie, estado: formState.estado, condicion: formState.condicion, notes: document.getElementById('sampleNotes').value.trim(), ts: Date.now() };
+  const notes = document.getElementById('sampleNotes').value.trim();
+  const fields = {
+    ParcelaId: currentParcelaId,
+    ParcelaNombre: p.name,
+    Especie: formState.especie,
+    Estado: formState.estado,
+    Condicion: formState.condicion,
+    Notas: notes,
+    Fecha: new Date().toISOString().split('T')[0]
+  };
 
-  if (currentSampleEdit !== null) {
-    p.samples[currentSampleEdit] = sample;
-    showToast('✅ Muestra actualizada');
-  } else {
-    p.samples.push(sample);
-    showToast('✅ Muestra registrada');
-  }
-
-  save();
   closeSample();
-  openMuestreo(currentParcelaId);
+  showLoader(currentSampleEdit !== null ? 'Actualizando muestra...' : 'Guardando muestra...');
+  setSyncDot('syncing');
+
+  try {
+    if (currentSampleEdit !== null && currentSampleAirtableId) {
+      await atUpdate('Muestras', currentSampleAirtableId, fields);
+      p.samples[currentSampleEdit] = { ...fields, airtableId: currentSampleAirtableId, especieId: formState.especie };
+      showToast('✅ Muestra actualizada');
+    } else {
+      const rec = await atCreate('Muestras', fields);
+      p.samples.push({ airtableId: rec.id, especieId: formState.especie, estado: formState.estado, condicion: formState.condicion, notes, ts: fields.Fecha });
+      showToast('✅ Muestra guardada en Airtable');
+    }
+    setSyncDot('ok');
+    openMuestreo(currentParcelaId);
+  } catch (err) {
+    setSyncDot('error');
+    showToast('❌ Error al guardar muestra');
+    console.error(err);
+  }
+  hideLoader();
 }
 
 // ── RESUMEN ──
@@ -1126,72 +773,38 @@ function renderResumen() {
 
   container.innerHTML = `
     <div class="overview-grid">
-      <div class="overview-item">
-        <div class="ov-num">${parcelas.length}</div>
-        <div class="ov-label">Parcelas</div>
-      </div>
-      <div class="overview-item">
-        <div class="ov-num">${totalMuestras}</div>
-        <div class="ov-label">Muestras totales</div>
-      </div>
-      <div class="overview-item" style="border-color:rgba(61,158,95,0.3)">
-        <div class="ov-num" style="color:#6dcf8e">${supervivencia}%</div>
-        <div class="ov-label">Supervivencia</div>
-      </div>
-      <div class="overview-item" style="border-color:rgba(255,255,255,0.1)">
-        <div class="ov-num">${Math.round((totalMuestras/Math.max(totalPlanificadas,1))*100)}%</div>
-        <div class="ov-label">Avance muestreo</div>
-      </div>
+      <div class="overview-item"><div class="ov-num">${parcelas.length}</div><div class="ov-label">Parcelas</div></div>
+      <div class="overview-item"><div class="ov-num">${totalMuestras}</div><div class="ov-label">Muestras totales</div></div>
+      <div class="overview-item" style="border-color:rgba(61,158,95,0.3)"><div class="ov-num" style="color:#6dcf8e">${supervivencia}%</div><div class="ov-label">Supervivencia</div></div>
+      <div class="overview-item"><div class="ov-num">${Math.round((totalMuestras/Math.max(totalPlanificadas,1))*100)}%</div><div class="ov-label">Avance muestreo</div></div>
     </div>
-
     <div class="summary-card">
       <h3>Estado de árboles</h3>
-      <div class="stat-row">
-        <span class="stat-label">✅ Vivos</span>
-        <span class="stat-value" style="color:#6dcf8e">${vivos} <span style="color:var(--fern);font-weight:400;font-size:12px">(${totalMuestras > 0 ? Math.round(vivos/totalMuestras*100) : 0}%)</span></span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">💀 Muertos</span>
-        <span class="stat-value" style="color:#e87060">${muertos} <span style="color:var(--fern);font-weight:400;font-size:12px">(${totalMuestras > 0 ? Math.round(muertos/totalMuestras*100) : 0}%)</span></span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">💧 Buenas condiciones</span>
-        <span class="stat-value" style="color:#64b4e0">${buenos}</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">🌵 Deshidratados</span>
-        <span class="stat-value" style="color:#f0a060">${dehy}</span>
-      </div>
+      <div class="stat-row"><span class="stat-label">✅ Vivos</span><span class="stat-value" style="color:#6dcf8e">${vivos} <span style="color:var(--fern);font-weight:400;font-size:12px">(${totalMuestras > 0 ? Math.round(vivos/totalMuestras*100) : 0}%)</span></span></div>
+      <div class="stat-row"><span class="stat-label">💀 Muertos</span><span class="stat-value" style="color:#e87060">${muertos} <span style="color:var(--fern);font-weight:400;font-size:12px">(${totalMuestras > 0 ? Math.round(muertos/totalMuestras*100) : 0}%)</span></span></div>
+      <div class="stat-row"><span class="stat-label">💧 Buenas condiciones</span><span class="stat-value" style="color:#64b4e0">${buenos}</span></div>
+      <div class="stat-row"><span class="stat-label">🌵 Deshidratados</span><span class="stat-value" style="color:#f0a060">${dehy}</span></div>
     </div>
-
     <div class="summary-card">
       <h3>Por Parcela</h3>
       ${parcelas.map(p => {
-        const pct = p.totalMuestras > 0 ? Math.round(p.samples.length / p.totalMuestras * 100) : 0;
         const pvivos = p.samples.filter(s => s.estado === 'vivo').length;
-        const surv = p.samples.length > 0 ? Math.round(pvivos / p.samples.length * 100) : '—';
-        return `<div class="stat-row">
-          <span class="stat-label">${p.name}</span>
-          <span class="stat-value">${p.samples.length}/${p.totalMuestras} · ${typeof surv === 'number' ? surv + '% vivos' : '—'}</span>
-        </div>`;
+        const surv = p.samples.length > 0 ? Math.round(pvivos / p.samples.length * 100) + '% vivos' : '—';
+        return `<div class="stat-row"><span class="stat-label">${p.name}</span><span class="stat-value">${p.samples.length}/${p.totalMuestras} · ${surv}</span></div>`;
       }).join('')}
     </div>
-
     <div class="summary-card">
       <h3>Por Especie</h3>
       ${Object.keys(especieCount).length === 0 ? '<p style="color:var(--fern);font-size:13px">Sin datos</p>' :
         EJEMPLARES.filter(e => especieCount[e.id]).map(e => `
-          <div class="stat-row">
-            <span class="stat-label">${e.icon} ${e.name}</span>
-            <span class="stat-value">${especieCount[e.id]} muestras</span>
-          </div>
+          <div class="stat-row"><span class="stat-label">${e.icon} ${e.name}</span><span class="stat-value">${especieCount[e.id]} muestras</span></div>
         `).join('')}
     </div>
   `;
 }
 
 // ── INIT ──
-renderParcelas();
+loadAll();
 </script>
 </body>
 </html>
